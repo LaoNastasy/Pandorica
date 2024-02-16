@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Pandorica</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="create">Create</string>
+</resources>
