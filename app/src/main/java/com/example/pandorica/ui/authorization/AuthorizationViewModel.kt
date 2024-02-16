@@ -7,13 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pandorica.data.Repository
 import com.example.pandorica.network.DomainException
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuthorizationViewModel(
+@HiltViewModel
+class AuthorizationViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
     private val _state = MutableStateFlow(AuthorizationState())
