@@ -18,14 +18,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.pandorica.R
 
 
 @Composable
 fun PasswordListScreen(
-    viewModel: PasswordListViewModel,
-    navController: NavController
+    viewModel: PasswordListViewModel
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -89,6 +87,4 @@ fun PasswordListScreen(
             )
         }
     }
-
-
 }

@@ -6,8 +6,9 @@ import com.example.pandorica.network.entity.authorization.signIn.SignInRequest
 import com.example.pandorica.network.entity.authorization.signIn.SignInResponse
 import com.example.pandorica.network.entity.authorization.signUp.SignUpRequest
 import com.example.pandorica.network.entity.authorization.signUp.SignUpResponse
+import javax.inject.Inject
 
-class RepositoryImpl(
+class RepositoryImpl @Inject constructor(
     private val retrofitErrorHandler: RetrofitErrorHandler,
     private val api: Api,
 ) : Repository {

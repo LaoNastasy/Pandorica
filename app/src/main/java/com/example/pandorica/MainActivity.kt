@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,7 +20,9 @@ import com.example.pandorica.navigation.PasswordListDestination
 import com.example.pandorica.ui.authorization.CreateAccountScreen
 import com.example.pandorica.ui.passwordList.PasswordListScreen
 import com.example.pandorica.ui.theme.PandoricaTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,14 +67,12 @@ private fun destinations(
 ) = mapOf<NavigationDestination, @Composable () -> Unit>(
     AuthorizationDestination to {
         CreateAccountScreen(
-            viewModel = viewModel(factory = App.Factory),
-            navController = navController
+            viewModel = hiltViewModel(),
         )
     },
     PasswordListDestination to {
         PasswordListScreen(
-            viewModel = viewModel(factory = App.Factory),
-            navController = navController
+            viewModel = hiltViewModel(),
         )
     }
 )
