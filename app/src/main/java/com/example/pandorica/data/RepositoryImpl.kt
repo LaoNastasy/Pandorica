@@ -11,8 +11,9 @@ import com.example.pandorica.network.entity.authorization.signUp.SignUpResponse
 import com.example.pandorica.network.entity.vault.GetVaultResponse
 import com.example.pandorica.network.entity.vault.PasswordEntry
 import com.example.pandorica.network.entity.vault.UpdateVaultRequest
+import javax.inject.Inject
 
-class RepositoryImpl(
+class RepositoryImpl @Inject constructor(
     private val retrofitErrorHandler: RetrofitErrorHandler,
     private val api: Api,
 ) : Repository {
