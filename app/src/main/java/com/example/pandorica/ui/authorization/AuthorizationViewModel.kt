@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pandorica.data.Repository
 import com.example.pandorica.network.DomainException
+import com.example.pandorica.network.entity.vault.PasswordEntry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -70,6 +71,47 @@ class AuthorizationViewModel(
 
         } finally {
 
+        }
+    }
+
+    fun apiTest() = viewModelScope.launch {
+        try {
+
+            val loginAndPassword = Pair("test9991", "test9991")
+            val signUpResponse = repository.signUp(loginAndPassword.first, loginAndPassword.second)
+            val signInResponse = repository.signIn(loginAndPassword.first, loginAndPassword.second)
+
+            val refreshToken = signInResponse.refreshToken
+            val getAccessTokenResponse = repository.getAccessToken(refreshToken)
+
+            val accessToken = "Bearer " + getAccessTokenResponse.accessToken
+            var vault = repository.getVault(accessToken)
+
+            repository.updateVault(
+                accessToken,
+                mapOf(
+                    "test3" to PasswordEntry("encodedLogin1", "encodedPassword1"),
+                    "test4" to PasswordEntry("encodedLogin2", "encodedPassword2"),
+                ),
+                null
+            )
+
+            vault = repository.getVault(accessToken)
+            println(vault)
+
+            repository.updateVault(
+                accessToken,
+                null,
+                listOf("test3")
+            )
+
+            vault = repository.getVault(accessToken)
+            println(vault)
+
+        } catch (e: DomainException) {
+            println(1)
+        } finally {
+            println(2)
         }
     }
 }
