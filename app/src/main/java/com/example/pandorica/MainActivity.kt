@@ -68,6 +68,7 @@ private fun destinations(
     AuthorizationDestination to {
         CreateAccountScreen(
             viewModel = hiltViewModel(),
+            navController = navController,
         )
     },
     PasswordListDestination to {

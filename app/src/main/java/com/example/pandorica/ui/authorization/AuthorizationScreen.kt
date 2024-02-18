@@ -24,12 +24,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pandorica.R
+import com.example.pandorica.navigation.PasswordListDestination
 
 
 @Composable
 fun CreateAccountScreen(
     viewModel: AuthorizationViewModel,
+    navController: NavController,
 ) {
     val state = viewModel.state.collectAsState().value
 
@@ -43,6 +46,12 @@ fun CreateAccountScreen(
                 "Success!",
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    LaunchedEffect(state.enterApplication) {
+        if (state.enterApplication) {
+            navController.navigate(PasswordListDestination.route())
         }
     }
 

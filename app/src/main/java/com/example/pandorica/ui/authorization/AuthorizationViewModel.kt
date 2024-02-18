@@ -33,6 +33,7 @@ class AuthorizationViewModel @Inject constructor(
         try {
             _state.update { it.copy(loading = true, error = null) }
             signInUseCase.invoke(state.value.login, state.value.password)
+            _state.update { it.copy(enterApplication = true) }
         } catch (e: DomainException) {
             _state.update { it.copy(error = e) }
         } finally {
@@ -60,7 +61,7 @@ class AuthorizationViewModel @Inject constructor(
             }
             delay(300)
             _state.update {
-                it.copy(successPopup = false)
+                it.copy(successPopup = false, enterApplication = true)
             }
         } catch (e: DomainException) {
             _state.update { it.copy(error = e) }
