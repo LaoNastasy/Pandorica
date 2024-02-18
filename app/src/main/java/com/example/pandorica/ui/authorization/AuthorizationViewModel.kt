@@ -23,23 +23,18 @@ class AuthorizationViewModel @Inject constructor(
     private val _state = MutableStateFlow(AuthorizationState())
     val state = _state.asStateFlow()
 
-    var login by mutableStateOf("")
-        private set
-    var password by mutableStateOf("")
-        private set
-
-    fun updateLogin(login: String) {
-        this.login = login
+    fun onLoginChanged(login: String) {
+        _state.update { it.copy(login = login) }
     }
 
-    fun updatePassword(password: String) {
-        this.password = password
+    fun onPasswordChanged(password: String) {
+        _state.update { it.copy(password = password) }
     }
 
     fun signIn() = viewModelScope.launch {
         try {
             _state.update { it.copy(loading = true, error = null) }
-            val response = repository.signIn(login, password)
+            val response = repository.signIn(state.value.login, state.value.password)
             _state.update { it.copy(authResponse = response) }
         } finally {
             _state.update { it.copy(loading = false) }
@@ -58,7 +53,7 @@ class AuthorizationViewModel @Inject constructor(
 
     fun createAccount() = viewModelScope.launch {
         try {
-            val response = repository.signUp(login, password)
+            val response = repository.signUp(state.value.login, state.value.password)
             _state.update {
                 it.copy(
                     successPopup = true

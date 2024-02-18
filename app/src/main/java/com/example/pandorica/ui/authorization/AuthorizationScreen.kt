@@ -36,7 +36,7 @@ fun CreateAccountScreen(
     val context = LocalContext.current
     val localFocusManager = LocalFocusManager.current
 
-    LaunchedEffect(key1 = state.successPopup, block = {
+    LaunchedEffect(state.successPopup) {
         if (state.successPopup) {
             Toast.makeText(
                 context,
@@ -44,7 +44,7 @@ fun CreateAccountScreen(
                 Toast.LENGTH_LONG
             ).show()
         }
-    })
+    }
 
     Column {
         Text(
@@ -64,8 +64,8 @@ fun CreateAccountScreen(
             modifier = Modifier
                 .padding(start = 32.dp, end = 32.dp)
                 .fillMaxWidth(),
-            value = viewModel.login,
-            onValueChange = { viewModel.updateLogin(it) },
+            value = state.login,
+            onValueChange = { viewModel.onLoginChanged(it) },
             shape = RoundedCornerShape(24.dp),
             label = {
                 Text(text = stringResource(R.string.login))
@@ -76,8 +76,8 @@ fun CreateAccountScreen(
             modifier = Modifier
                 .padding(start = 32.dp, end = 32.dp)
                 .fillMaxWidth(),
-            value = viewModel.password,
-            onValueChange = { viewModel.updatePassword(it) },
+            value = state.password,
+            onValueChange = { viewModel.onPasswordChanged(it) },
             shape = RoundedCornerShape(24.dp),
             label = {
                 Text(text = stringResource(R.string.password))
@@ -88,8 +88,12 @@ fun CreateAccountScreen(
                 .fillMaxWidth()
                 .padding(start = 64.dp, end = 64.dp, top = 32.dp),
             onClick = {
-                viewModel.apiTest()
-//                viewModel.signIn()
+                localFocusManager.clearFocus()
+                if (state.authMethod == AuthorizationMethod.createAccount) {
+                    viewModel.createAccount()
+                } else {
+                    viewModel.signIn()
+                }
             },
 
             ) {
@@ -103,12 +107,16 @@ fun CreateAccountScreen(
             )
         }
         ClickableText(
-            text = AnnotatedString(if (state.authMethod == AuthorizationMethod.createAccount) {
-                stringResource(R.string.sign_in)
-            } else {
-                stringResource(R.string.register)
-            }),
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, end = 32.dp),
+            text = AnnotatedString(
+                if (state.authMethod == AuthorizationMethod.createAccount) {
+                    stringResource(R.string.sign_in)
+                } else {
+                    stringResource(R.string.register)
+                }
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, end = 32.dp),
             style = TextStyle(
                 color = Color.Gray,
                 fontSize = 18.sp,
@@ -117,8 +125,7 @@ fun CreateAccountScreen(
             ),
             onClick = {
                 viewModel.changeAuthMethod()
-            })
+            }
+        )
     }
-
-
 }
