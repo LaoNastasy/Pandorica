@@ -49,7 +49,10 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun providesConsoleHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor()
+    fun providesConsoleHttpLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
 
 
     @Singleton
