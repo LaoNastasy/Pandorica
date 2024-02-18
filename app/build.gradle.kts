@@ -68,6 +68,8 @@ dependencies {
     //Hilt
     implementation("com.google.dagger:hilt-android:2.50")
     implementation("com.google.dagger:dagger:2.50")
+    implementation("androidx.security:security-crypto:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     kapt("com.google.dagger:hilt-compiler:2.50")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     kapt("com.google.dagger:dagger-compiler:2.50")

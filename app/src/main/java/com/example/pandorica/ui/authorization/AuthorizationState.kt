@@ -7,7 +7,6 @@ data class AuthorizationState (
     val login: String = "",
     val password: String = "",
     val loading: Boolean = false,
-    val authResponse: AuthBaseResponse? = null,
     val successPopup: Boolean = false,
     val error: DomainException? = null,
     val authMethod: AuthorizationMethod = AuthorizationMethod.signIn
