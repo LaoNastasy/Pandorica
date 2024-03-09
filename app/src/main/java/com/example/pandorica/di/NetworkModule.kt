@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Authenticator
 import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -31,12 +32,14 @@ class NetworkModule {
     fun providesOkHttp(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         interceptors: Set<@JvmSuppressWildcards Interceptor>,
+        authenticators: Set<@JvmSuppressWildcards Authenticator>,
     ): OkHttpClient =
         OkHttpClient()
             .newBuilder()
             .dispatcher(Dispatcher().apply { maxRequestsPerHost = 20 })
             .addInterceptor(httpLoggingInterceptor)
             .also { builder -> interceptors.forEach { builder.addInterceptor(it) } }
+            .also { builder -> authenticators.forEach { builder.authenticator(it) } }
             .connectTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS)

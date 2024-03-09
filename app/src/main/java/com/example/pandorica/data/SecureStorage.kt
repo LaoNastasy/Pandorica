@@ -15,5 +15,6 @@ class SecureStorage @Inject constructor(
 
     companion object {
         const val TOKEN_KEY = "TOKEN_KEY"
+        const val REFRESH_TOKEN_KEY = "REFRESH_TOKEN_KEY"
     }
 }
