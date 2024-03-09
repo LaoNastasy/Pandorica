@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pandorica.R
 import com.example.pandorica.navigation.PasswordListDestination
+import com.example.pandorica.ui.shared.Loader
 
 
 @Composable
@@ -35,9 +36,7 @@ fun CreateAccountScreen(
     navController: NavController,
 ) {
     val state = viewModel.state.collectAsState().value
-
     val context = LocalContext.current
-    val localFocusManager = LocalFocusManager.current
 
     LaunchedEffect(state.successPopup) {
         if (state.successPopup) {
@@ -52,15 +51,44 @@ fun CreateAccountScreen(
     LaunchedEffect(state.enterApplication) {
         if (state.enterApplication) {
             navController.navigate(PasswordListDestination.route())
+            viewModel.onEnterApplicationHandled()
         }
     }
 
+    when {
+        state.loading -> Loader()
+        else -> Content(
+            authMethod = state.authMethod,
+            login = state.login,
+            password = state.password,
+            onLoginChanged = viewModel::onLoginChanged,
+            onPasswordChanged = viewModel::onPasswordChanged,
+            onCreateAccountClick = viewModel::onCreateAccountClick,
+            onSignInClick = viewModel::onSignInClick,
+            onChangeAuthMethodClick = viewModel::onChangeAuthMethodClick
+        )
+    }
+
+}
+
+@Composable
+private fun Content(
+    authMethod: AuthorizationMethod,
+    login: String,
+    password: String,
+    onLoginChanged: (String) -> Unit,
+    onPasswordChanged: (String) -> Unit,
+    onCreateAccountClick: () -> Unit,
+    onSignInClick: () -> Unit,
+    onChangeAuthMethodClick: () -> Unit,
+) {
+    val localFocusManager = LocalFocusManager.current
     Column {
         Text(
-            text = if (state.authMethod == AuthorizationMethod.createAccount) {
-                stringResource(R.string.create_account)
+            text = if (authMethod == AuthorizationMethod.createAccount) {
+                stringResource(R.string.auth_create_account)
             } else {
-                stringResource(R.string.sign_in)
+                stringResource(R.string.auth_sign_in)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,11 +101,11 @@ fun CreateAccountScreen(
             modifier = Modifier
                 .padding(start = 32.dp, end = 32.dp)
                 .fillMaxWidth(),
-            value = state.login,
-            onValueChange = { viewModel.onLoginChanged(it) },
+            value = login,
+            onValueChange = onLoginChanged,
             shape = RoundedCornerShape(24.dp),
             label = {
-                Text(text = stringResource(R.string.login))
+                Text(text = stringResource(R.string.auth_login))
             }
         )
 
@@ -85,11 +113,11 @@ fun CreateAccountScreen(
             modifier = Modifier
                 .padding(start = 32.dp, end = 32.dp)
                 .fillMaxWidth(),
-            value = state.password,
-            onValueChange = { viewModel.onPasswordChanged(it) },
+            value = password,
+            onValueChange = onPasswordChanged,
             shape = RoundedCornerShape(24.dp),
             label = {
-                Text(text = stringResource(R.string.password))
+                Text(text = stringResource(R.string.auth_password))
             }
         )
         Button(
@@ -98,29 +126,29 @@ fun CreateAccountScreen(
                 .padding(start = 64.dp, end = 64.dp, top = 32.dp),
             onClick = {
                 localFocusManager.clearFocus()
-                if (state.authMethod == AuthorizationMethod.createAccount) {
-                    viewModel.createAccount()
+                if (authMethod == AuthorizationMethod.createAccount) {
+                    onCreateAccountClick()
                 } else {
-                    viewModel.signIn()
+                    onSignInClick()
                 }
             },
 
             ) {
             Text(
-                text = if (state.authMethod == AuthorizationMethod.createAccount) {
-                    stringResource(R.string.create)
+                text = if (authMethod == AuthorizationMethod.createAccount) {
+                    stringResource(R.string.auth_create_button)
                 } else {
-                    stringResource(R.string.sign_in)
+                    stringResource(R.string.auth_sign_in)
                 },
                 fontSize = 16.sp
             )
         }
         ClickableText(
             text = AnnotatedString(
-                if (state.authMethod == AuthorizationMethod.createAccount) {
-                    stringResource(R.string.sign_in)
+                if (authMethod == AuthorizationMethod.createAccount) {
+                    stringResource(R.string.auth_sign_in)
                 } else {
-                    stringResource(R.string.register)
+                    stringResource(R.string.auth_register)
                 }
             ),
             modifier = Modifier
@@ -132,9 +160,7 @@ fun CreateAccountScreen(
                 textAlign = TextAlign.Right,
                 textDecoration = TextDecoration.Underline
             ),
-            onClick = {
-                viewModel.changeAuthMethod()
-            }
+            onClick = { onChangeAuthMethodClick() }
         )
     }
 }

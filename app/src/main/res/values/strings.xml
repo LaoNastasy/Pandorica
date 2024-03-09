@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">Pandorica</string>
-    <string name="create_account">Create Account</string>
-    <string name="sign_in">Sign in</string>
-    <string name="register">Register</string>
-    <string name="login">Login</string>
-    <string name="password">Password</string>
-    <string name="create">Create</string>
+
+
+    <string name="auth_create_account">Create Account</string>
+    <string name="auth_sign_in">Sign in</string>
+    <string name="auth_register">Register</string>
+    <string name="auth_login">Login</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_create_button">Create</string>
+
+    <string name="password_list_title">Accounts</string>
+    <string name="password_list_login">Login: %s</string>
+    <string name="password_list_password">Password: %s</string>
+
+    <string name="error_title">Oops! Something went wrong</string>
+    <string name="error_button">Try again</string>
 </resources>

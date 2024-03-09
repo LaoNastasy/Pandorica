@@ -2,6 +2,7 @@ package com.example.pandorica.ui.authorization
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pandorica.domain.GetTokenUseCase
 import com.example.pandorica.domain.SignInUseCase
 import com.example.pandorica.domain.SignUpUseCase
 import com.example.pandorica.network.DomainException
@@ -17,9 +18,14 @@ import javax.inject.Inject
 class AuthorizationViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
     private val signUpUseCase: SignUpUseCase,
+    private val getTokenUseCase: GetTokenUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(AuthorizationState())
     val state = _state.asStateFlow()
+
+    init {
+        checkIfSignedIn()
+    }
 
     fun onLoginChanged(login: String) {
         _state.update { it.copy(login = login) }
@@ -29,7 +35,11 @@ class AuthorizationViewModel @Inject constructor(
         _state.update { it.copy(password = password) }
     }
 
-    fun signIn() = viewModelScope.launch {
+    fun onEnterApplicationHandled() {
+        _state.update { it.copy(enterApplication = false) }
+    }
+
+    fun onSignInClick() = viewModelScope.launch {
         try {
             _state.update { it.copy(loading = true, error = null) }
             signInUseCase.invoke(state.value.login, state.value.password)
@@ -42,7 +52,7 @@ class AuthorizationViewModel @Inject constructor(
     }
 
 
-    fun changeAuthMethod() {
+    fun onChangeAuthMethodClick() {
         _state.update {
             val newMethod =
                 if (it.authMethod == AuthorizationMethod.signIn)
@@ -52,7 +62,7 @@ class AuthorizationViewModel @Inject constructor(
         }
     }
 
-    fun createAccount() = viewModelScope.launch {
+    fun onCreateAccountClick() = viewModelScope.launch {
         _state.update { it.copy(loading = true) }
         try {
             signUpUseCase.invoke(state.value.login, state.value.password)
@@ -68,5 +78,12 @@ class AuthorizationViewModel @Inject constructor(
         } finally {
             _state.update { it.copy(loading = false) }
         }
+    }
+
+    private fun checkIfSignedIn() {
+        _state.update { it.copy(loading = true) }
+        val token = getTokenUseCase.invoke()
+        if (token != null) _state.update { it.copy(enterApplication = true) }
+        else _state.update { it.copy(loading = false) }
     }
 }

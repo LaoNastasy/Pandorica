@@ -22,13 +22,15 @@ class PasswordListViewModel @Inject constructor(
         loadData()
     }
 
+    fun onReload() = loadData()
+
     private fun loadData() = viewModelScope.launch {
         try {
-            _state.update { it.copy(loading = true) }
+            _state.update { it.copy(loading = true, error = false) }
             val passwords = getPasswordsUseCase.invoke().passwordEntries
             _state.update { it.copy(passwordEntries = passwords, loading = false) }
         } catch (e: DomainException) {
-
+            _state.update { it.copy(error = true, loading = false) }
         }
     }
 }
