@@ -45,7 +45,7 @@ class NetworkModule {
     @Singleton
     @Provides
     fun providesRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("http://ec2-18-153-93-50.eu-central-1.compute.amazonaws.com:8081/")
+        .baseUrl("https:/api.pandorica-storage.com/")
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

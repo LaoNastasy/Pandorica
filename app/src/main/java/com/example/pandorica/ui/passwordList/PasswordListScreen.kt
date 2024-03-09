@@ -1,24 +1,20 @@
 package com.example.pandorica.ui.passwordList
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.pandorica.R
+import com.example.pandorica.network.entity.vault.PasswordEntry
+import com.example.pandorica.ui.theme.PandoricaTheme
 
 
 @Composable
@@ -27,64 +23,27 @@ fun PasswordListScreen(
 ) {
     val state = viewModel.state.collectAsState().value
 
-    val context = LocalContext.current
-    val localFocusManager = LocalFocusManager.current
+    LazyColumn {
+        items(state.passwordEntries) { Item(it) }
+    }
+}
 
-    LaunchedEffect(key1 = state.successPopup, block = {
-        if (state.successPopup) {
-            Toast.makeText(
-                context,
-                "Success!",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    })
-
+@Composable
+private fun Item(passwordEntry: PasswordEntry) {
     Column(
-        modifier = Modifier.padding(start = 16.dp)
-    ) {
-        Text(
-            text = stringResource(R.string.create_account),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 80.dp),
-            fontSize = 36.sp
-        )
-        OutlinedTextField(
-            value = viewModel.login,
-            onValueChange = { viewModel.updateLogin(it) },
-//            placeholder = {
-//                Text(text = stringResource(R.string.login))
-//            },
-            shape = RoundedCornerShape(24.dp),
-            label = {
-                Text(text = stringResource(R.string.login))
-            }
-        )
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)) {
+        Text(text = passwordEntry.encodedLogin ?: "")
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = passwordEntry.encodedPassword)
+    }
+}
 
-        OutlinedTextField(
-            value = viewModel.password,
-            onValueChange = { viewModel.updatePassword(it) },
-//            placeholder = {
-//                Text(text = stringResource(R.string.password))
-//            },
-            shape = RoundedCornerShape(24.dp),
-            label = {
-                Text(text = stringResource(R.string.password))
-            }
-        )
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                viewModel.createAccount()
-                localFocusManager.clearFocus()
-            },
-
-            ) {
-            Text(
-                text = stringResource(R.string.create),
-                fontSize = 16.sp
-            )
-        }
+@Preview
+@Composable
+private fun Preview() {
+    PandoricaTheme {
+        Item(passwordEntry = PasswordEntry("login", "password"))
     }
 }

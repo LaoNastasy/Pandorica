@@ -10,6 +10,6 @@ class TokenRepositoryImpl @Inject constructor(
         set(value) = tokenInMemoryStorage.setToken(value)
 
     override fun updateTokens(accessToken: String, refreshToken: String) {
-        this.token = token
+        this.token = accessToken
     }
 }

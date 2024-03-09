@@ -28,5 +28,4 @@ interface AuthModule {
     @Binds
     @Singleton
     fun providesTokenRepository(tokenRepositoryImpl: TokenRepositoryImpl): TokenRepository
-
 }

@@ -14,7 +14,7 @@ interface Repository {
 
     suspend fun getAccessToken(refreshToken: String): GetAccessTokenResponse
 
-    suspend fun getVault(token: String): GetVaultResponse
+    suspend fun getVault(): GetVaultResponse
 
     suspend fun updateVault(token: String, addOrUpdate: Map<String, PasswordEntry>?, delete: List<String>?)
 }

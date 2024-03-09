@@ -39,9 +39,9 @@ class RepositoryImpl @Inject constructor(
             )
         })
 
-    override suspend fun getVault(token: String): GetVaultResponse =
+    override suspend fun getVault(): GetVaultResponse =
         requireNotNull(retrofitErrorHandler.apiCall {
-            api.getVault(token)
+            api.getVault()
         })
 
     override suspend fun updateVault(

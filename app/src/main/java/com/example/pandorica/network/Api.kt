@@ -26,7 +26,7 @@ interface Api {
     suspend fun getAccessToken(@Body request: GetAccessTokenRequest): Response<GetAccessTokenResponse>
 
     @GET("vault")
-    suspend fun getVault(@Header("Authorization") token: String,): Response<GetVaultResponse>
+    suspend fun getVault(): Response<GetVaultResponse>
 
     @POST("vault/update")
     suspend fun updateVault(@Header("Authorization") token: String,@Body request: UpdateVaultRequest):Response<Unit>

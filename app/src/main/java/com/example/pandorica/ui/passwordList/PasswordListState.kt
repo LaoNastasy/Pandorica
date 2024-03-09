@@ -1,10 +1,8 @@
 package com.example.pandorica.ui.passwordList
 
-import com.example.pandorica.network.DomainException
+import com.example.pandorica.network.entity.vault.PasswordEntry
 
-data class PasswordListState (
-    val login: String = "",
-    val password: String = "",
-    val successPopup: Boolean = false,
-    val error: DomainException? = null
+data class PasswordListState(
+    val passwordEntries: List<PasswordEntry> = emptyList(),
+    val loading: Boolean = false,
 )
