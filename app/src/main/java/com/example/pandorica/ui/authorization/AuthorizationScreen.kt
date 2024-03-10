@@ -37,7 +37,14 @@ fun AuthorizationScreen(
 
     LaunchedEffect(state.enterApplication) {
         if (state.enterApplication) {
-            navController.navigate(PasswordListDestination.route())
+            navController.navigate(
+                route = PasswordListDestination.route(),
+                builder = {
+                    navController.currentDestination?.route?.let { currentRoute ->
+                        popUpTo(currentRoute) { inclusive = true }
+                    }
+                }
+            )
             viewModel.onEnterApplicationHandled()
         }
     }
