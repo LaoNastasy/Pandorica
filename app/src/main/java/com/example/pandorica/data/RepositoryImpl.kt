@@ -45,13 +45,11 @@ class RepositoryImpl @Inject constructor(
         })
 
     override suspend fun updateVault(
-        token: String,
         addOrUpdate: Map<String, PasswordEntry>?,
         delete: List<String>?
     ) {
         retrofitErrorHandler.apiCall {
             api.updateVault(
-                token,
                 UpdateVaultRequest(
                     addOrUpdate, delete
                 )

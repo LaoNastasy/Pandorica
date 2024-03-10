@@ -13,11 +13,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.example.pandorica.navigation.AuthorizationDestination
+import com.example.pandorica.navigation.CreateAccountDestination
 import com.example.pandorica.navigation.NavigationDestination
 import com.example.pandorica.navigation.PasswordListDestination
-import com.example.pandorica.ui.authorization.CreateAccountScreen
+import com.example.pandorica.ui.authorization.AuthorizationScreen
+import com.example.pandorica.ui.createaccount.CreateAccountScreen
 import com.example.pandorica.ui.passwordList.PasswordListScreen
 import com.example.pandorica.ui.theme.PandoricaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,17 +59,25 @@ fun MyNavHost(
             ) {
                 entry.value()
             }
+        }
 
+        dialogDestinations(navController).forEach { entry ->
+            val destination = entry.key
+            dialog(
+                route = destination.route(),
+                arguments = destination.arguments,
+            ) {
+                entry.value()
+            }
         }
     }
-
 }
 
 private fun destinations(
     navController: NavController,
 ) = mapOf<NavigationDestination, @Composable () -> Unit>(
     AuthorizationDestination to {
-        CreateAccountScreen(
+        AuthorizationScreen(
             viewModel = hiltViewModel(),
             navController = navController,
         )
@@ -74,6 +85,15 @@ private fun destinations(
     PasswordListDestination to {
         PasswordListScreen(
             viewModel = hiltViewModel(),
+            navController = navController
         )
+    }
+)
+
+private fun dialogDestinations(
+    navController: NavController,
+) = mapOf<NavigationDestination, @Composable () -> Unit>(
+    CreateAccountDestination to {
+        CreateAccountScreen(viewModel = hiltViewModel())
     }
 )

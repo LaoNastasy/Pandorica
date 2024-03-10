@@ -1,6 +1,5 @@
 package com.example.pandorica.ui.authorization
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -15,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -31,22 +29,11 @@ import com.example.pandorica.ui.shared.Loader
 
 
 @Composable
-fun CreateAccountScreen(
+fun AuthorizationScreen(
     viewModel: AuthorizationViewModel,
     navController: NavController,
 ) {
     val state = viewModel.state.collectAsState().value
-    val context = LocalContext.current
-
-    LaunchedEffect(state.successPopup) {
-        if (state.successPopup) {
-            Toast.makeText(
-                context,
-                "Success!",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
 
     LaunchedEffect(state.enterApplication) {
         if (state.enterApplication) {

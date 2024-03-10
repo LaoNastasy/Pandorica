@@ -7,7 +7,6 @@ import com.example.pandorica.domain.SignInUseCase
 import com.example.pandorica.domain.SignUpUseCase
 import com.example.pandorica.network.DomainException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -67,11 +66,7 @@ class AuthorizationViewModel @Inject constructor(
         try {
             signUpUseCase.invoke(state.value.login, state.value.password)
             _state.update {
-                it.copy(successPopup = true)
-            }
-            delay(300)
-            _state.update {
-                it.copy(successPopup = false, enterApplication = true)
+                it.copy(enterApplication = true)
             }
         } catch (e: DomainException) {
             _state.update { it.copy(error = e) }

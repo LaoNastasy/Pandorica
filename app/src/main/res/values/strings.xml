@@ -15,4 +15,9 @@
 
     <string name="error_title">Oops! Something went wrong</string>
     <string name="error_button">Try again</string>
+
+    <string name="create_account_title">Create account</string>
+    <string name="create_account_login">Login</string>
+    <string name="create_account_password">Password</string>
+    <string name="create_account_action">Create</string>
 </resources>

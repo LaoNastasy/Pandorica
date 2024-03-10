@@ -29,6 +29,6 @@ interface Api {
     suspend fun getVault(): Response<GetVaultResponse>
 
     @POST("vault/update")
-    suspend fun updateVault(@Header("Authorization") token: String,@Body request: UpdateVaultRequest):Response<Unit>
+    suspend fun updateVault(@Body request: UpdateVaultRequest): Response<Unit>
 
 }
