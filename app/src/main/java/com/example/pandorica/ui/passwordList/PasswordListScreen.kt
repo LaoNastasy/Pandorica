@@ -1,5 +1,8 @@
 package com.example.pandorica.ui.passwordList
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -60,20 +64,25 @@ fun PasswordListScreen(
             )
         }
     ) { paddingValues ->
-        when {
-            state.error -> ErrorContent(viewModel::onReload)
-            state.loading -> Loader()
-            else -> {
-                LazyColumn(Modifier.padding(paddingValues)) {
-                    items(state.passwordEntries) { Item(it) }
+
+        if (state.error) {
+            ErrorContent(viewModel::onReload)
+        } else {
+            LazyColumn(Modifier.padding(paddingValues)) {
+                items(state.passwordEntries.sortedBy { it.timestamp }) {
+                    Item(
+                        passwordEntry = it,
+                        onDeleteClick = viewModel::onDeleteClick
+                    )
                 }
             }
         }
+        if (state.loading) Loader()
     }
 }
 
 @Composable
-private fun Item(passwordEntry: PasswordEntry) {
+private fun Item(passwordEntry: PasswordEntry, onDeleteClick: (PasswordEntry) -> Unit) {
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -81,26 +90,42 @@ private fun Item(passwordEntry: PasswordEntry) {
         colors = CardDefaults.cardColors(containerColor = PurpleGrey80)
 
     ) {
-        if (passwordEntry.name != null) {
-            Text(
-                text = stringResource(
-                    id = R.string.password_list_name,
-                    passwordEntry.name
-                ), modifier = Modifier.padding(8.dp)
-            )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        ) {
+            Column {
+                if (passwordEntry.name != null) {
+                    Text(
+                        text = stringResource(
+                            id = R.string.password_list_name,
+                            passwordEntry.name
+                        ), modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+                Text(
+                    text = stringResource(
+                        id = R.string.password_list_login,
+                        passwordEntry.encodedLogin ?: ""
+                    ), modifier = Modifier.padding(vertical = 8.dp)
+                )
+                Text(
+                    text = stringResource(
+                        id = R.string.password_list_password,
+                        passwordEntry.encodedPassword
+                    ), modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+            IconButton(onClick = { onDeleteClick.invoke(passwordEntry) }) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = null
+                )
+            }
         }
-        Text(
-            text = stringResource(
-                id = R.string.password_list_login,
-                passwordEntry.encodedLogin ?: ""
-            ), modifier = Modifier.padding(8.dp)
-        )
-        Text(
-            text = stringResource(
-                id = R.string.password_list_password,
-                passwordEntry.encodedPassword
-            ), modifier = Modifier.padding(8.dp)
-        )
     }
 }
 
@@ -109,6 +134,9 @@ private fun Item(passwordEntry: PasswordEntry) {
 @Composable
 private fun Preview() {
     PandoricaTheme {
-        Item(passwordEntry = PasswordEntry("name", "login", "password"))
+        Item(
+            passwordEntry = PasswordEntry("name", "login", "password"),
+            onDeleteClick = {}
+        )
     }
 }
