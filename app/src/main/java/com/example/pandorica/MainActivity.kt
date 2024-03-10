@@ -94,6 +94,6 @@ private fun dialogDestinations(
     navController: NavController,
 ) = mapOf<NavigationDestination, @Composable () -> Unit>(
     CreateAccountDestination to {
-        CreateAccountScreen(viewModel = hiltViewModel())
+        CreateAccountScreen(viewModel = hiltViewModel(), navController = navController)
     }
 )

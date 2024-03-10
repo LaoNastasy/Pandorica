@@ -10,6 +10,7 @@
     <string name="auth_create_button">Create</string>
 
     <string name="password_list_title">Accounts</string>
+    <string name="password_list_name">Name: %s</string>
     <string name="password_list_login">Login: %s</string>
     <string name="password_list_password">Password: %s</string>
 
@@ -18,6 +19,7 @@
 
     <string name="create_account_title">Create account</string>
     <string name="create_account_login">Login</string>
+    <string name="create_account_name">Name</string>
     <string name="create_account_password">Password</string>
     <string name="create_account_action">Create</string>
 </resources>

@@ -19,12 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.example.pandorica.R
 import com.example.pandorica.navigation.CreateAccountDestination
 import com.example.pandorica.network.entity.vault.PasswordEntry
 import com.example.pandorica.ui.shared.ErrorContent
 import com.example.pandorica.ui.shared.Loader
+import com.example.pandorica.ui.shared.OnLifecycleEvent
 import com.example.pandorica.ui.theme.PandoricaTheme
 import com.example.pandorica.ui.theme.PurpleGrey80
 
@@ -36,6 +38,10 @@ fun PasswordListScreen(
     navController: NavController,
 ) {
     val state = viewModel.state.collectAsState().value
+
+    OnLifecycleEvent { _, event ->
+        if (event == Lifecycle.Event.ON_RESUME) viewModel.onReload()
+    }
 
     Scaffold(
         topBar = {
@@ -75,6 +81,14 @@ private fun Item(passwordEntry: PasswordEntry) {
         colors = CardDefaults.cardColors(containerColor = PurpleGrey80)
 
     ) {
+        if (passwordEntry.name != null) {
+            Text(
+                text = stringResource(
+                    id = R.string.password_list_name,
+                    passwordEntry.name
+                ), modifier = Modifier.padding(8.dp)
+            )
+        }
         Text(
             text = stringResource(
                 id = R.string.password_list_login,
@@ -95,6 +109,6 @@ private fun Item(passwordEntry: PasswordEntry) {
 @Composable
 private fun Preview() {
     PandoricaTheme {
-        Item(passwordEntry = PasswordEntry("login", "password"))
+        Item(passwordEntry = PasswordEntry("name", "login", "password"))
     }
 }

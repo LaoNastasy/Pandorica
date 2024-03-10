@@ -16,5 +16,6 @@ interface Repository {
 
     suspend fun getVault(): GetVaultResponse
 
-    suspend fun updateVault(addOrUpdate: Map<String, PasswordEntry>?, delete: List<String>?)
+    suspend fun createAccount(passwordEntry: PasswordEntry)
+    suspend fun deleteAccount(name: String)
 }

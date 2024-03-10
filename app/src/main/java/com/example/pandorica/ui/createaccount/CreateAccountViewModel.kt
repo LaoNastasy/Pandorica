@@ -21,14 +21,17 @@ class CreateAccountViewModel @Inject constructor(
     fun onCreateClick() = viewModelScope.launch {
         try {
             _state.update { it.copy(isLoading = true) }
-            useCase.invoke(PasswordEntry(state.value.login, state.value.password))
+            useCase.invoke(PasswordEntry(state.value.name, state.value.login, state.value.password))
         } catch (e: Exception) {
-
+            // todo
         } finally {
-            _state.update { it.copy(isLoading = false) }
+            _state.update { it.copy(isLoading = false, goBack = true) }
         }
     }
 
+    fun onGoBackHandled() = _state.update { it.copy(goBack = false) }
+
+    fun onNameChanged(string: String) = _state.update { it.copy(name = string) }
     fun onLoginChanged(string: String) = _state.update { it.copy(login = string) }
     fun onPasswordChanged(string: String) = _state.update { it.copy(password = string) }
 }

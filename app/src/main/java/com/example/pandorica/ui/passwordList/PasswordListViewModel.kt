@@ -1,5 +1,8 @@
 package com.example.pandorica.ui.passwordList
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pandorica.domain.GetPasswordsUseCase
@@ -17,10 +20,6 @@ class PasswordListViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(PasswordListState())
     val state = _state.asStateFlow()
-
-    init {
-        loadData()
-    }
 
     fun onReload() = loadData()
 
