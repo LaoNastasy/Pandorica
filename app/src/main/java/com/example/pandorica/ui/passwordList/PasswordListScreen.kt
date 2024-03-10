@@ -27,6 +27,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import com.example.pandorica.R
 import com.example.pandorica.navigation.CreateAccountDestination
+import com.example.pandorica.navigation.DeleteAccountDestination
 import com.example.pandorica.network.entity.vault.PasswordEntry
 import com.example.pandorica.ui.shared.ErrorContent
 import com.example.pandorica.ui.shared.Loader
@@ -72,7 +73,10 @@ fun PasswordListScreen(
                 items(state.passwordEntries.sortedBy { it.timestamp }) {
                     Item(
                         passwordEntry = it,
-                        onDeleteClick = viewModel::onDeleteClick
+                        onDeleteClick = {
+                            it.name ?: return@Item
+                            navController.navigate(DeleteAccountDestination.createRoute(it.name))
+                        }
                     )
                 }
             }

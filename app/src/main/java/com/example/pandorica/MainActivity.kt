@@ -17,10 +17,12 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.example.pandorica.navigation.AuthorizationDestination
 import com.example.pandorica.navigation.CreateAccountDestination
+import com.example.pandorica.navigation.DeleteAccountDestination
 import com.example.pandorica.navigation.NavigationDestination
 import com.example.pandorica.navigation.PasswordListDestination
 import com.example.pandorica.ui.authorization.AuthorizationScreen
 import com.example.pandorica.ui.createaccount.CreateAccountScreen
+import com.example.pandorica.ui.deleteaccount.DeleteAccountDialog
 import com.example.pandorica.ui.passwordList.PasswordListScreen
 import com.example.pandorica.ui.theme.PandoricaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,5 +97,8 @@ private fun dialogDestinations(
 ) = mapOf<NavigationDestination, @Composable () -> Unit>(
     CreateAccountDestination to {
         CreateAccountScreen(viewModel = hiltViewModel(), navController = navController)
+    },
+    DeleteAccountDestination to {
+        DeleteAccountDialog(viewModel = hiltViewModel(), navController = navController)
     }
 )

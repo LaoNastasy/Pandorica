@@ -34,30 +34,32 @@ fun CreateAccountScreen(viewModel: CreateAccountViewModel, navController: NavCon
         }
     }
 
-    Column(Modifier.background(Color.White), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        Modifier
+            .background(Color.White)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         TopAppBar(title = { Text(text = stringResource(id = R.string.create_account_title)) })
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = stringResource(id = R.string.create_account_name),
-            modifier = Modifier.padding(horizontal = 16.dp)
         )
         TextField(value = state.name, onValueChange = viewModel::onNameChanged)
 
         Text(
             text = stringResource(id = R.string.create_account_login),
-            modifier = Modifier.padding(horizontal = 16.dp)
         )
         TextField(value = state.login, onValueChange = viewModel::onLoginChanged)
         Text(
             text = stringResource(id = R.string.create_account_password),
-            modifier = Modifier.padding(horizontal = 16.dp)
         )
         TextField(
             value = state.password,
             onValueChange = viewModel::onPasswordChanged,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(vertical = 8.dp)
         )
         Button(onClick = viewModel::onCreateClick) {
             Text(text = stringResource(id = R.string.create_account_action))

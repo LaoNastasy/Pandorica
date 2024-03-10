@@ -22,4 +22,8 @@
     <string name="create_account_name">Name</string>
     <string name="create_account_password">Password</string>
     <string name="create_account_action">Create</string>
+
+    <string name="delete_account_title">Delete account</string>
+    <string name="delete_account_text">Are you sure you want to delete account %s?</string>
+    <string name="delete_account_action">Confirm</string>
 </resources>
