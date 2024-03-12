@@ -5,6 +5,7 @@ import com.example.pandorica.network.DomainException
 data class AuthorizationState(
     val login: String = "",
     val password: String = "",
+    val encodedSecretKey: String = "",
     val loading: Boolean = false,
     val error: DomainException? = null,
     val authMethod: AuthorizationMethod = AuthorizationMethod.signIn,

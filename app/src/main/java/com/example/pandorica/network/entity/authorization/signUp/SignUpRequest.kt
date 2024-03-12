@@ -4,5 +4,6 @@ import com.example.pandorica.network.entity.authorization.AuthBaseRequest
 
 class SignUpRequest(
     login: String,
-    password: String
+    password: String,
+    encodedSecretKey: String
 ): AuthBaseRequest(login, password)

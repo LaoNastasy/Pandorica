@@ -4,5 +4,6 @@ import com.example.pandorica.network.entity.authorization.AuthBaseResponse
 
 class SignInResponse(
     accessToken: String,
-    refreshToken: String
-) : AuthBaseResponse(accessToken, refreshToken)
+    refreshToken: String,
+    encodedSecretKey: String
+) : AuthBaseResponse(accessToken, refreshToken, encodedSecretKey)

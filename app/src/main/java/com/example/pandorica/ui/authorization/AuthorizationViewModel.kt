@@ -64,7 +64,7 @@ class AuthorizationViewModel @Inject constructor(
     fun onCreateAccountClick() = viewModelScope.launch {
         _state.update { it.copy(loading = true) }
         try {
-            signUpUseCase.invoke(state.value.login, state.value.password)
+            signUpUseCase.invoke(state.value.login, state.value.password, state.value.encodedSecretKey)
             _state.update {
                 it.copy(enterApplication = true)
             }

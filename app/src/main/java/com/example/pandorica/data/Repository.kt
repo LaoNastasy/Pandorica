@@ -8,7 +8,7 @@ import com.example.pandorica.network.entity.vault.PasswordEntry
 
 interface Repository {
 
-    suspend fun signUp(login: String, password: String): SignUpResponse
+    suspend fun signUp(login: String, password: String, encodedSecretKey: String): SignUpResponse
 
     suspend fun signIn(login: String, password: String): SignInResponse
 
