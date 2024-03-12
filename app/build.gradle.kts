@@ -65,6 +65,9 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
+    //Bouncycastle
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+
     //Hilt
     implementation("com.google.dagger:hilt-android:2.50")
     implementation("com.google.dagger:dagger:2.50")
