@@ -64,7 +64,8 @@ class AuthorizationViewModel @Inject constructor(
     fun onCreateAccountClick() = viewModelScope.launch {
         _state.update { it.copy(loading = true) }
         try {
-            signUpUseCase.invoke(state.value.login, state.value.password, state.value.encodedSecretKey)
+
+            signUpUseCase.invoke(state.value.login, state.value.password, generateKey())
             _state.update {
                 it.copy(enterApplication = true)
             }
@@ -73,6 +74,12 @@ class AuthorizationViewModel @Inject constructor(
         } finally {
             _state.update { it.copy(loading = false) }
         }
+    }
+
+    private fun generateKey(): String {
+        val masterPassword = _state.value.masterPassword
+        // todo generate key by masterKey and save in mobile
+        return ""
     }
 
     private fun checkIfSignedIn() {
