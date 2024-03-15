@@ -1,5 +1,6 @@
 package com.example.pandorica.ui.authorization
 
+import SecurityService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pandorica.domain.GetTokenUseCase
@@ -34,6 +35,14 @@ class AuthorizationViewModel @Inject constructor(
         _state.update { it.copy(password = password) }
     }
 
+    fun onPasswordVisibilityChanged() {
+        _state.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
+    }
+
+    fun onMasterPasswordChanged(masterPassword: String) {
+        _state.update { it.copy(masterPassword = masterPassword) }
+    }
+
     fun onEnterApplicationHandled() {
         _state.update { it.copy(enterApplication = false) }
     }
@@ -57,15 +66,30 @@ class AuthorizationViewModel @Inject constructor(
                 if (it.authMethod == AuthorizationMethod.signIn)
                     AuthorizationMethod.createAccount
                 else AuthorizationMethod.signIn
-            it.copy(authMethod = newMethod)
+            it.copy(
+                authMethod = newMethod,
+                password = "",
+                masterPassword = ""
+            )
         }
     }
 
     fun onCreateAccountClick() = viewModelScope.launch {
         _state.update { it.copy(loading = true) }
         try {
-
-            signUpUseCase.invoke(state.value.login, state.value.password, generateKey())
+            val masterPassword = _state.value.masterPassword
+            if (masterPassword.isEmpty()) {
+                throw DomainException.Unknown
+            }
+            val encKey = SecurityService.generateEncKey()
+            val salt = SecurityService.generateSalt()
+            val encodedEncKey = SecurityService.encodeEncKey(encKey, salt)
+            signUpUseCase.invoke(
+                login = state.value.login,
+                password = state.value.password,
+                encodedSecretKey = String(encodedEncKey),
+                salt = String(salt)
+            )
             _state.update {
                 it.copy(enterApplication = true)
             }
@@ -74,12 +98,6 @@ class AuthorizationViewModel @Inject constructor(
         } finally {
             _state.update { it.copy(loading = false) }
         }
-    }
-
-    private fun generateKey(): String {
-        val masterPassword = _state.value.masterPassword
-        // todo generate key by masterKey and save in mobile
-        return ""
     }
 
     private fun checkIfSignedIn() {

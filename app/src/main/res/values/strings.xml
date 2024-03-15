@@ -7,6 +7,7 @@
     <string name="auth_register">Register</string>
     <string name="auth_login">Login</string>
     <string name="auth_password">Password</string>
+    <string name="auth_master_password">Master password</string>
     <string name="auth_create_button">Create</string>
 
     <string name="password_list_title">Accounts</string>

@@ -17,10 +17,10 @@ class RepositoryImpl @Inject constructor(
     private val retrofitErrorHandler: RetrofitErrorHandler,
     private val api: Api,
 ) : Repository {
-    override suspend fun signUp(login: String, password: String, encodedSecretKey: String): SignUpResponse = requireNotNull(
+    override suspend fun signUp(login: String, password: String, encodedSecretKey: String, salt: String): SignUpResponse = requireNotNull(
         retrofitErrorHandler.apiCall {
             api.signUp(
-                SignUpRequest(login, password, encodedSecretKey)
+                SignUpRequest(login, password, encodedSecretKey, salt)
             )
         }
     )

@@ -6,7 +6,12 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.sharp.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +23,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -55,11 +62,15 @@ fun AuthorizationScreen(
             authMethod = state.authMethod,
             login = state.login,
             password = state.password,
+            masterPassword = state.masterPassword,
+            isPasswordVisible = state.isPasswordVisible,
+            onPasswordVisibilityChanged = viewModel::onPasswordVisibilityChanged,
             onLoginChanged = viewModel::onLoginChanged,
             onPasswordChanged = viewModel::onPasswordChanged,
+            onMasterPasswordChanged = viewModel::onMasterPasswordChanged,
             onCreateAccountClick = viewModel::onCreateAccountClick,
             onSignInClick = viewModel::onSignInClick,
-            onChangeAuthMethodClick = viewModel::onChangeAuthMethodClick
+            onChangeAuthMethodClick = viewModel::onChangeAuthMethodClick,
         )
     }
 
@@ -70,8 +81,12 @@ private fun Content(
     authMethod: AuthorizationMethod,
     login: String,
     password: String,
+    masterPassword: String,
+    isPasswordVisible: Boolean,
+    onPasswordVisibilityChanged: () -> Unit,
     onLoginChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
+    onMasterPasswordChanged: (String) -> Unit,
     onCreateAccountClick: () -> Unit,
     onSignInClick: () -> Unit,
     onChangeAuthMethodClick: () -> Unit,
@@ -110,10 +125,50 @@ private fun Content(
             value = password,
             onValueChange = onPasswordChanged,
             shape = RoundedCornerShape(24.dp),
+            visualTransformation = if(isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (isPasswordVisible)
+                    Icons.Filled.Add
+                else Icons.Sharp.Search
+
+                // Please provide localized description for accessibility services
+                val description = if (isPasswordVisible) "Hide password" else "Show password"
+
+                IconButton(onClick = onPasswordVisibilityChanged){
+                    Icon(imageVector  = image, description)
+                }
+            },
             label = {
                 Text(text = stringResource(R.string.auth_password))
             }
         )
+        if(authMethod == AuthorizationMethod.createAccount){
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(start = 32.dp, end = 32.dp)
+                    .fillMaxWidth(),
+                value = masterPassword,
+                onValueChange = onMasterPasswordChanged,
+                shape = RoundedCornerShape(24.dp),
+                visualTransformation = if(isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    val image = if (isPasswordVisible)
+                        Icons.Filled.Add
+                    else Icons.Sharp.Search
+
+                    // Please provide localized description for accessibility services
+                    val description = if (isPasswordVisible) "Hide master password" else "Show master password"
+
+                    IconButton(onClick = onPasswordVisibilityChanged){
+                        Icon(imageVector  = image, description)
+                    }
+                },
+                label = {
+                    Text(text = stringResource(R.string.auth_master_password))
+                }
+            )
+        }
+
         Button(
             modifier = Modifier
                 .fillMaxWidth()
