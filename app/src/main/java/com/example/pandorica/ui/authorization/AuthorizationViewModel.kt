@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.bouncycastle.jce.provider.BouncyCastleProvider
+import java.security.Security
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,6 +79,7 @@ class AuthorizationViewModel @Inject constructor(
     fun onCreateAccountClick() = viewModelScope.launch {
         _state.update { it.copy(loading = true) }
         try {
+            Security.insertProviderAt(BouncyCastleProvider(), 0)
             val masterPassword = _state.value.masterPassword
             if (masterPassword.isEmpty()) {
                 throw DomainException.Unknown
